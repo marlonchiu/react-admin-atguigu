@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
-import {Button, message} from 'antd'
-
+// 引入路由
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Login from './pages/login/login'
+import Admin from './pages/admin/admin'
 class App extends Component {
-    state = {  }
     render() { 
         return ( 
-            <div>
-                <Button type='primary'
-                    onClick={this.handleClick}>学习</Button>
-            </div>
+            <BrowserRouter>
+                <Switch>
+                    <Route path='/login' component={Login}></Route>
+                    <Route path='/' component={Admin}></Route>
+                </Switch>
+            </BrowserRouter>
          )
-    }
-
-    // 注意要绑定this  否则的话可以使用箭头函数
-    handleClick = () => {
-        message.success('成功啦...')
     }
 }
  
