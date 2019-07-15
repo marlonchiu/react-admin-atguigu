@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import logo from '../../assets/images/logo.png'
 import './login.less'
-import {Button, Form, Icon, Input,} from 'antd'
-
+import {Button, Form, Icon, Input} from 'antd'
+import { reqLogin } from '../../api'
 // const Item = Form.Item // 不能写在import 之前
 
 // 用户登陆的路由组件
@@ -84,7 +84,7 @@ class Login extends Component {
                         </Form.Item>
                         <Form.Item>
                           {
-                              getFieldDecorator('PASSWORD', {
+                              getFieldDecorator('password', {
                                 rules: [
                                   { required: true, message: 'Please input your Password!' },
                                   // 使用自定义的验证规则
@@ -123,9 +123,18 @@ class Login extends Component {
         // const values = form.getFieldsValue()
         // console.log(values)
 
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields(async (err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                // console.log('Received values of form: ', values);
+                const {username, password} = values
+
+                // 初始用法
+                // reqLogin(username, password).then(response => {
+                //     console.log(response);
+                // })
+
+                const result = await reqLogin(username, password)
+                console.log('login()', result)
             }
         });
     }
