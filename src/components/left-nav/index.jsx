@@ -15,14 +15,14 @@ class LeftNav extends Component {
                     <h1>硅谷后台</h1>
                 </Link>
                 <Menu
-                    defaultSelectedKeys={['1']}
-                    defaultOpenKeys={['sub1']}
                     mode="inline"
                     theme="dark"
                 >
-                    <Menu.Item key="1">
-                        <Icon type="home" />
-                        <span>首页</span>
+                    <Menu.Item key="/home">
+                        <Link to='/home'>
+                            <Icon type="home" />
+                            <span>首页</span>
+                        </Link>
                     </Menu.Item>
                     <SubMenu
                         key="sub1"
@@ -33,16 +33,67 @@ class LeftNav extends Component {
                             </span>
                         }
                     >
-                        <Menu.Item key="5">
+                        <Menu.Item key="/category">
                             <span>
-                                <Icon type="bars" />
-                                <span>品类管理</span>
+                                <Link to='/category'>
+                                    <Icon type="bars" />
+                                    <span>品类管理</span>
+                                </Link>
+
                             </span>
                         </Menu.Item>
-                        <Menu.Item key="6">
+                        <Menu.Item key="/product">
                             <span>
-                                <Icon type="tool" />
-                                <span>商品管理</span>
+                                <Link to='/product'>
+                                   <Icon type="tool" />
+                                    <span>商品管理</span>
+                                </Link>
+                            </span>
+                        </Menu.Item>
+                    </SubMenu>
+                    <Menu.Item key="/user">
+                        <Link to='/user'>
+                            <Icon type="user" />
+                            <span>用户管理</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key="/role">
+                        <Link to='/role'>
+                            <Icon type="safety" />
+                            <span>角色管理</span>
+                        </Link>
+                    </Menu.Item>
+                    <SubMenu
+                        key="sub12"
+                        title={
+                            <span>
+                                <Icon type="area-chart" />
+                                <span>图形图表</span>
+                            </span>
+                        }
+                    >
+                        <Menu.Item key="/charts/bar">
+                            <span>
+                                <Link to='/charts/bar'>
+                                    <Icon type="bar-chart" />
+                                    <span>柱形图</span>
+                                </Link>
+                            </span>
+                        </Menu.Item>
+                        <Menu.Item key="/charts/line">
+                            <span>
+                                <Link to='/charts/line'>
+                                   <Icon type="line-chart" />
+                                    <span>折线图</span>
+                                </Link>
+                            </span>
+                        </Menu.Item>
+                        <Menu.Item key="/charts/pie">
+                            <span>
+                                <Link to='/charts/pie'>
+                                   <Icon type="pie-chart" />
+                                    <span>饼图</span>
+                                </Link>
                             </span>
                         </Menu.Item>
                     </SubMenu>
