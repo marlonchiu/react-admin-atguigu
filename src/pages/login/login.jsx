@@ -83,8 +83,23 @@ class Login extends Component {
 
 /*
 * 高阶函数
-*   Form.create()
+*       1). 一类特别的函数
+*           a. 接受函数类型的参数
+*           b. 返回值是函数
+*       2). 常见举例：
+*           a. 定时器: setTimeout()/setInterval()
+*           b. Promise: Promise(() => {}) then(value => {}, reason => {})
+*           c. 数组遍历相关的方法: forEach()/filter()/map()/reduce()/find()/findIndex()
+*           d. 函数对象的bind()
+*           e. Form.create()() / getFieldDecorator()()
+*
 * 高阶组件
+*       1). 本质就是一个函数
+*       2). 接收一个组件(被包装组件), 返回一个新的组件(包装组件), 包装组件会向被包装组件传入特定属性
+*       3). 作用: 扩展组件的功能
+*       4). 高阶组件也是高阶函数: 接收一个组件函数, 返回是一个新的组件函数
+*
+*
 *   Form.create() 包装Form组件生成一个新的组件Form(Login) 可以通过react dev tools 查看
 *   新组件会向Form组件传递一个强大的对象属性 form
 * */
@@ -93,7 +108,8 @@ const WrappedLoginForm = Form.create({ name: 'normal_login' })(Login)
 export default WrappedLoginForm
 
 /*
-    前台表单验证，收据收集
+    前台表单验证，
+    收集表单数据
 
     用户名/密码的合法性要求：
         用户名/密码的的合法性要求
