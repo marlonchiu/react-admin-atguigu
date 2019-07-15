@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
+import { Redirect } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import './login.less'
 import {Button, Form, Icon, Input, message} from 'antd'
 import { reqLogin } from '../../api'
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils'
 // const Item = Form.Item // 不能写在import 之前
 
 // 用户登陆的路由组件
@@ -43,6 +46,10 @@ class Login extends Component {
   
 
     render() {
+        // 如果用户已经登录自动跳转到admin
+        if(memoryUtils.user && memoryUtils.user._id) {
+            return <Redirect to='/' />
+        }
         // this.props.form 得到具备强大功能的form 对象
         const { getFieldDecorator } = this.props.form
 
@@ -145,6 +152,10 @@ class Login extends Component {
                 console.log('请求成功', result)
                 if(result.status === 0) { // 登陆成功
                     message.success('登录成功')
+
+                    const user = result.data
+                    storageUtils.saveUser(user)
+                    memoryUtils.user = user
                     // 跳转到 admin
                     // 细节： 使用replace表示当我们登陆成功以后是不需要再回到login页面的 故不用push
                     this.props.history.replace('/')
