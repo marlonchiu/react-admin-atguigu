@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import logo from '../../assets/images/logo.png'
 import './login.less'
-import {Button, Form, Icon, Input} from 'antd'
+import {Button, Form, Icon, Input, message} from 'antd'
 import { reqLogin } from '../../api'
 // const Item = Form.Item // 不能写在import 之前
 
@@ -134,13 +134,23 @@ class Login extends Component {
                 // })
 
                 // async和await
-                try {
-                    const result = await reqLogin(username, password)
-                    console.log('请求成功', result)
-                } catch (e) {
-                    console.log(e)
+                // try {
+                //     const result = await reqLogin(username, password)
+                //     console.log('请求成功', result)
+                // } catch (e) {
+                //     console.log(e)
+                // }   error 已经在封装 axios 是处理掉了
+
+                const result = await reqLogin(username, password)
+                console.log('请求成功', result)
+                if(result.status === 0) { // 登陆成功
+                    message.success('登录成功')
+                    // 跳转到 admin
+                    // 细节： 使用replace表示当我们登陆成功以后是不需要再回到login页面的 故不用push
+                    this.props.history.replace('/')
+                } else {
+                    message.error(result.msg)
                 }
-                
             }
         });
     }
