@@ -11,7 +11,7 @@
 import axios from 'axios'
 import  { message } from 'antd'
 
-export default function ajax(url, data={}, method='GET') {
+const ajax = (url, data={}, method='GET') => {
     return new Promise(function (resolve, reject) {
         let promise
         // 执行异步ajax请求
@@ -33,6 +33,7 @@ export default function ajax(url, data={}, method='GET') {
     })
 }
 
+export default ajax
 // 请求登陆接口
 // ajax('/login', {username: 'Tom', passsword: '12345'}, 'POST').then()
 // 添加用户
