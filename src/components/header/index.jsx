@@ -72,7 +72,6 @@ class Header extends Component {
     //     return true
     // }
 
-
     render() {
         // 数据解构赋值
         const {sysTime, dayPictureUrl, weather} = this.state
