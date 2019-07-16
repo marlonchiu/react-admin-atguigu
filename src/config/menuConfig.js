@@ -1,7 +1,7 @@
 const menuList = [{
         title: '首页', // 菜单标题名称
         key: '/home', // 对应的 path
-        icon: 'home', // 图标名称
+        icon: 'home' // 图标名称
     },
     {
         title: '商品',
@@ -17,7 +17,7 @@ const menuList = [{
                 title: '商品管理',
                 key: '/product',
                 icon: 'tool'
-            },
+            }
         ]
     },
     {
@@ -28,7 +28,7 @@ const menuList = [{
     {
         title: '角色管理',
         key: '/role',
-        icon: 'safety',
+        icon: 'safety'
     },
     {
         title: '图形图表',
@@ -48,8 +48,8 @@ const menuList = [{
                 title: '饼图',
                 key: '/charts/pie',
                 icon: 'pie-chart'
-            },
+            }
         ]
-    },
+    }
 ]
 export default menuList

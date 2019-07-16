@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { withRouter} from 'react-router-dom'
 import './index.less'
-import {reqWeather} from '../../api'
+import { reqWeather } from '../../api'
 import { formateDate } from '../../utils/dateUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
+import LinkButton from '../link-button'
 import {Modal} from 'antd'
 import menuList from '../../config/menuConfig'
 
@@ -37,6 +38,7 @@ class Header extends Component {
     }
 
     // 根据请求的 path 得到对应的标题
+    // 判断父元素是否匹配  如果有children  在查找子元素是否匹配
     getTitle = (path) => {
         let title
         menuList.forEach(menu => {
@@ -50,6 +52,7 @@ class Header extends Component {
                 })
             }
         })
+
         return title
     }
 
@@ -63,6 +66,11 @@ class Header extends Component {
         // 清除定时器
         clearInterval(this.intervalId)
     }
+
+    // 性能优化（问题存在  时间更新模块都会渲染）
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return true
+    // }
 
 
     render() {
@@ -79,7 +87,7 @@ class Header extends Component {
             <div className='header'>
                 <div className="header-top">
                     <span>欢迎, {user.username}</span>
-                    <span onClick={this.logout}>退出</span>
+                    <LinkButton onClick={this.logout}>退出</LinkButton>
                 </div>
                 <div className='header-bottom'>
                     <div className='header-bottom-left'>{title}</div>
@@ -98,6 +106,7 @@ class Header extends Component {
         Modal.confirm({
             content: '确定退出当前系统吗?',
             onOk: () => {
+                // 要用箭头函数  存在this 的问题
                 console.log('ok')
                 // 移除登录信息user 跳转到login
                 storageUtils.removeUser()
