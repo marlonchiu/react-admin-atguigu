@@ -1,14 +1,32 @@
 // 包含应用中所有的请求接口
 
+// 基本要求: 能根据接口文档定义接口请求函数
+
 import ajax from './ajax'
 import jsonp from 'jsonp'
 import {message} from 'antd'
 
-// const BASE_URL = 'http://localhost:5000'
-const BASE_URL = ''
+// const BASE = 'http://localhost:5000'
+const BASE = ''
 // 登录
 //  如果 使用箭头函数 {} 则需要return
-export const reqLogin = (username, password)=> ajax(BASE_URL + '/login', {username, password}, 'POST')
+export const reqLogin = (username, password)=> ajax(BASE + '/login', {username, password}, 'POST')
+
+// category 模块的接口
+// 获取一级/二级分类的列表
+export const reqCategorys = (parentId) => ajax(BASE + '/manage/category/list', {parentId})
+
+// 添加分类
+export const reqAddCategory = (categoryName, parentId) => ajax(BASE + '/manage/category/add', {categoryName, parentId}, 'POST')
+
+// 更新分类
+export const reqUpdateCategory = ({categoryId, categoryName}) => ajax(BASE + '/manage/category/update', {categoryId, categoryName}, 'POST')
+
+// 获取一个分类
+export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', {categoryId})
+
+
+
 
 // 添加用户
 export const reqAddUser = (user) => ajax(BASE_URL + '/manage/user/add', user, 'POST')
