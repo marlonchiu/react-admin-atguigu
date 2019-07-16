@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Table, Button, Icon, message} from 'antd'
+import { Card, Table, Button, Icon, message, Modal} from 'antd'
 import LinkButton from '../../components/link-button'
 import { reqCategorys } from '../../api'
 
@@ -10,7 +10,8 @@ class Category extends Component {
         subCategorys: [], // 二级分类列表
         parentId: '0', // 当前需要显示的分类列表的父分类ID
         parentName: '', // 父分类的名称
-        loading: false
+        loading: false,
+        showStatus: 0, // 标识添加 / 更新的确认框是否显示, 0: 都不显示, 1: 显示添加, 2: 显示更新
     }
 
     // 获取分类列表
@@ -56,7 +57,7 @@ class Category extends Component {
                 align: 'center',
                 render: (category) => ( // 返回需要显示的界面标签
                     <span>
-                        <LinkButton>修改分类</LinkButton>
+                        <LinkButton onClick={this.showUpdate}>修改分类</LinkButton>
                         {/*如何向事件回调函数传递参数: 先定义一个匿名函数, 在函数调用处理的函数并传入数据*/}
                         { this.state.parentId === '0' ? <LinkButton onClick={() => {this.showSubCategorys(category)}}>查看子分类</LinkButton> : null}
                     </span>
@@ -77,7 +78,7 @@ class Category extends Component {
     }
 
     render() {
-        const { categorys, loading, subCategorys, parentId, parentName } = this.state
+        const { categorys, loading, subCategorys, parentId, parentName, showStatus } = this.state
 
         // card 左侧标题
         const title = parentId === '0' ? '一级分类标题' :
@@ -88,7 +89,7 @@ class Category extends Component {
             </span>
         // card 右侧
         const extra = (
-            <Button type="primary">
+            <Button type="primary" onClick={this.showAdd}>
                 <Icon type="plus"/>
                 增加
             </Button>
@@ -104,6 +105,22 @@ class Category extends Component {
                     columns={this.columns}
                     pagination={{defaultPageSize: 5, showQuickJumper: true}}
                 />
+
+                <Modal
+                    title="添加分类"
+                    visible={showStatus === 1}
+                    onCancel={this.handleCancel}
+                >
+                    <p>Some contents...</p>
+                </Modal>
+
+                <Modal
+                    title="更新分类"
+                    visible={showStatus === 2}
+                    onCancel={this.handleCancel}
+                >
+                    <p>Some contents...</p>
+                </Modal>
             </Card>
          );
     }
@@ -132,6 +149,31 @@ class Category extends Component {
             this.getCategorys()
 
             // setState()不能立即获取最新的状态: 因为setState()是异步更新状态的
+        })
+    }
+
+    // 显示增加分类
+    showAdd = () => {
+        this.setState({
+            showStatus: 1
+        })
+    }
+
+    // 显示更新分类
+    showUpdate = () => {
+        this.setState({
+            showStatus: 2
+        })
+    }
+
+    // 响应点击取消: 隐藏确定框
+    handleCancel = () => {
+        // 清除输入数据
+        // this.form.resetFields()
+
+        // 隐藏确认框
+        this.setState({
+            showStatus: 0
         })
     }
 }
