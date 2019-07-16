@@ -5266,6 +5266,10 @@ jsonify@~0.0.0:
 jsonp@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npm.taobao.org/jsonp/download/jsonp-0.2.1.tgz#a65b4fa0f10bda719a05441ea7b94c55f3e15bae"
+<<<<<<< HEAD
+=======
+  integrity sha1-pltPoPEL2nGaBUQep7lMVfPhW64=
+>>>>>>> 39d992907f88ffa6e1a024f4290ed3fbdb2fde20
   dependencies:
     debug "^2.1.3"
 
