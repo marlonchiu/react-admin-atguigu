@@ -1,3 +1,44 @@
 .header {
-  height: 80px;
+    height: 80px;
+    background-color: #fff;
+    .header-top {
+        height: 40px;
+        line-height: 40px;
+        text-align: right;
+        padding-right: 20px;
+        border-bottom: 2px solid #1da57a;
+    }
+    .header-bottom {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        .header-bottom-left {
+            position: relative;
+            width: 25%;
+            font-size: 20px;
+            text-align: center;
+            // 向下箭头的绘制
+            &::after {
+                content: '';
+                position: absolute;
+                top: 30px;
+                right: 50%;  // 设置三角 居中的操作
+                transform: translateX(50%); // 设置三角 居中的操作
+                border-top: 20px solid #fff;
+                border-right: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+                border-left: 20px solid transparent;
+            }
+        }
+        .header-bottom-right {
+            width: 75%;
+            text-align: right;
+            margin-right: 30px;
+            img {
+                width: 30px;
+                height: 20px;
+                margin: 0 15px;
+            }
+        }
+    }
 }
