@@ -29,7 +29,7 @@ export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', 
 
 
 // 添加用户
-export const reqAddUser = (user) => ajax(BASE_URL + '/manage/user/add', user, 'POST')
+export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
 
 // 百度天气
 export const reqWeather = (city) => {
