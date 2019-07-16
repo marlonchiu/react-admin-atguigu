@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import { withRouter} from 'react-router-dom'
 import './index.less'
 import {reqWeather} from '../../api'
 import { formateDate } from '../../utils/dateUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import storageUtils from '../../utils/storageUtils'
 import {Modal} from 'antd'
+import menuList from '../../config/menuConfig'
 
 class Header extends Component {
     constructor(props) {
@@ -34,6 +36,23 @@ class Header extends Component {
         }, 1000)
     }
 
+    // 根据请求的 path 得到对应的标题
+    getTitle = (path) => {
+        let title
+        menuList.forEach(menu => {
+            if(menu.key === path) {
+                title = menu.title
+            } else if(menu.children) {
+                menu.children.forEach(item => {
+                    if(path.indexOf(item.key) === 0) {
+                        title = item.title
+                    }
+                })
+            }
+        })
+        return title
+    }
+
 
     componentDidMount() {
         this.getSysTime()
@@ -51,15 +70,19 @@ class Header extends Component {
         const {sysTime, dayPictureUrl, weather} = this.state
         // 当前登录的用户
         const user = memoryUtils.user
+        // 当前页面的请求路径
+        const path  = this.props.location.pathname
+        // console.log(path);
+        const title = this.getTitle(path)
 
         return ( 
             <div className='header'>
                 <div className="header-top">
                     <span>欢迎, {user.username}</span>
-                    <a onClick={this.logout}>退出</a>
+                    <span onClick={this.logout}>退出</span>
                 </div>
                 <div className='header-bottom'>
-                    <div className='header-bottom-left'>首页</div>
+                    <div className='header-bottom-left'>{title}</div>
                     <div className='header-bottom-right'>
                         <span>{sysTime}</span>
                         <img src={dayPictureUrl} alt="weather"/>
@@ -88,4 +111,4 @@ class Header extends Component {
     }
 }
  
-export default Header;
+export default withRouter(Header)
