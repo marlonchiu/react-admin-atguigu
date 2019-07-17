@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
+import { reqProducts } from '../../api'
+import { PAGE_SIZE } from '../../utils/constants'
+
 import {
     Card,
     Select,
@@ -10,6 +13,7 @@ import {
     message
 } from 'antd'
 const { Option } = Select
+
 
 // Product的默认子路由组件
 class ProductHome extends Component {
@@ -82,6 +86,34 @@ class ProductHome extends Component {
         ];
     }
 
+    getProducts = async(pageNum) => {
+        this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
+        this.setState({loading: true}) // 显示loading
+        const result = await reqProducts({
+            pageNum,
+            pageSize: PAGE_SIZE
+        })
+        this.setState({loading: false}) // 显示loading
+
+        if (result.status === 0) {
+            console.log(result.data)
+            // 取出分页数据, 更新状态, 显示分页列表
+            const {total, list} = result.data
+            this.setState({
+                total,
+                products: list
+            })
+        } else {
+            message.error(result.msg)
+        }
+
+    }
+
+    // 执行异步任务: 发异步ajax请求
+    componentDidMount () {
+        // 获取一级分类列表显示
+        this.getProducts(1)
+    }
 
     // 为第一次render()准备数据
     componentWillMount () {
@@ -125,10 +157,11 @@ class ProductHome extends Component {
                     columns={this.columns}
                     dataSource={products}
                     pagination={{
-                        current: 1,
+                        current: this.pageNum,
                         total,
-                        defaultPageSize: 5,
-                        showQuickJumper: true
+                        defaultPageSize: PAGE_SIZE,
+                        showQuickJumper: true,
+                        onChange: this.getProducts
                     }}/>
             </Card>
          );
