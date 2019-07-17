@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Table, Button, Icon, message, Modal} from 'antd'
 import LinkButton from '../../components/link-button'
-import { reqCategorys } from '../../api'
+import { reqCategorys, reqUpdateCategory } from '../../api'
 
 import AddForm from './add-form'
 import UpdateForm from './update-form'
@@ -60,7 +60,7 @@ class Category extends Component {
                 align: 'center',
                 render: (category) => ( // 返回需要显示的界面标签
                     <span>
-                        <LinkButton onClick={this.showUpdate}>修改分类</LinkButton>
+                        <LinkButton onClick={() => this.showUpdate(category)}>修改分类</LinkButton>
                         {/*如何向事件回调函数传递参数: 先定义一个匿名函数, 在函数调用处理的函数并传入数据*/}
                         { this.state.parentId === '0' ? <LinkButton onClick={() => {this.showSubCategorys(category)}}>查看子分类</LinkButton> : null}
                     </span>
@@ -82,6 +82,9 @@ class Category extends Component {
 
     render() {
         const { categorys, loading, subCategorys, parentId, parentName, showStatus } = this.state
+
+        // 读取指定的分类
+        const category = this.category || {}// 如果还没有指定一个空对象
 
         // card 左侧标题
         const title = parentId === '0' ? '一级分类标题' :
@@ -121,8 +124,13 @@ class Category extends Component {
                     title="更新分类"
                     visible={showStatus === 2}
                     onCancel={this.handleCancel}
+                    onOk={this.updateCategory}
                 >
-                    <UpdateForm />
+                    {/* 组件见的通信  子组件向父组件传递数据*/}
+                    <UpdateForm
+                        categoryName={category.name}
+                        setForm={(form) => {this.form = form }}
+                    />
                 </Modal>
             </Card>
          );
@@ -141,7 +149,7 @@ class Category extends Component {
 
     // 显示指定一级分类对象的二子列表
     showSubCategorys = (category) => {
-        console.log(category);
+        console.log(category)
         // 更新状态
         this.setState({
             parentId: category._id,
@@ -163,16 +171,44 @@ class Category extends Component {
     }
 
     // 显示更新分类
-    showUpdate = () => {
+    showUpdate = (category) => {
+        // 接收了分类数据
+        console.log(category)
+        // 保存分类数据
+        this.category = category
+
         this.setState({
             showStatus: 2
         })
     }
 
+    // 更新分类
+    updateCategory = async () => {
+        // 0 关闭窗口
+        this.setState({
+            showStatus: 0
+        })
+
+        // 1 收集数据
+        const categoryId = this.category._id
+        const categoryName = this.form.getFieldValue('categoryName')
+        // console.log(categoryId, categoryName);
+        // 清除输入数据（否则修改时会利用缓存的）
+        this.form.resetFields()
+
+        // 2 发起请求更新分类
+        const result = await reqUpdateCategory({categoryId, categoryName})
+        if (result.status === 0) {
+            // 3 重新显示列表
+            this.getCategorys()
+        }
+    }
+
+
     // 响应点击取消: 隐藏确定框
     handleCancel = () => {
         // 清除输入数据
-        // this.form.resetFields()
+        this.form.resetFields()
 
         // 隐藏确认框
         this.setState({
