@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
 import { reqProducts, reqSearchProducts } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
+import './product.less'
 
 import {
     Card,
