@@ -95,8 +95,9 @@ class LeftNav extends Component {
                 ))
             } else {
                 // 查找一个与当前请求路径匹配的子Item
-                const cItem = item.children.find(cItem => cItem.key === path)
-                // const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
+                // const cItem = item.children.find(cItem => cItem.key === path)
+                //      这里采用indexOf处理 为了解决商品页面如果进入详情不选中的bug
+                const cItem = item.children.find(cItem => path.indexOf(cItem.key) === 0)
                 // 如果存在, 说明当前item的子列表需要打开
                 if (cItem) {
                     this.openKey = item.key
@@ -131,8 +132,13 @@ class LeftNav extends Component {
     }
 
     render() {
-        const path = this.props.location.pathname
+        let path = this.props.location.pathname
         console.log('render()', path);
+        // 优化商品详情页面不选中的情况
+        if(path.indexOf('/product') === 0 ) {
+            path = '/product'
+        }
+
         // 得到需要打开菜单项的key
         const openKey = this.openKey
         return (
