@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
-import { reqProducts } from '../../api'
+import { reqProducts, reqSearchProducts } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 
 import {
@@ -20,25 +20,10 @@ class ProductHome extends Component {
 
     state = {
         total: 0, // 商品的总数量
-        products: [
-            {
-                _id: '1',
-                name: 'John Brown',
-                price: 32,
-                desc: 'New York No. 1 Lake Park',
-                status: 0,
-            },
-            {
-                _id: '2',
-                name: 'Jim Green',
-                price: 42,
-                desc: 'London No. 1 Lake Park',
-                status: 1,
-            }
-        ], // 商品的数组
+        products: [], // 商品的数组
         loading: false, // 是否正在加载中
         searchName: '', // 搜索的关键字
-        searchType: 'productName', // 根据哪个字段搜索
+        searchType: 'productName' // 根据哪个字段搜索
     }
 
     // 初始化table的列数组
@@ -89,14 +74,30 @@ class ProductHome extends Component {
     getProducts = async(pageNum) => {
         this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
         this.setState({loading: true}) // 显示loading
-        const result = await reqProducts({
-            pageNum,
-            pageSize: PAGE_SIZE
-        })
-        this.setState({loading: false}) // 显示loading
+        
+        const {searchName, searchType} = this.state
+        // console.log(searchName, searchType)
+        // 如果搜索关键字有值, 说明我们要做搜索分页
+        let result
+
+        if(searchName) {
+            result = await reqSearchProducts({
+                pageNum,
+                pageSize: PAGE_SIZE,
+                searchType,
+                searchName
+            })
+        } else {
+            result = await reqProducts({
+                pageNum,
+                pageSize: PAGE_SIZE
+            })
+        }
+
+        this.setState({loading: false}) // 隐藏loading
 
         if (result.status === 0) {
-            console.log(result.data)
+            // console.log(result.data)
             // 取出分页数据, 更新状态, 显示分页列表
             const {total, list} = result.data
             this.setState({
@@ -127,7 +128,11 @@ class ProductHome extends Component {
         // card 左侧标题
         const title = (
             <span>
-                <Select dvalue= {searchType} style={{width: 150}}>
+                <Select
+                    value= {searchType}
+                    style={{width: 150}}
+                    onChange={value => this.setState({searchType: value})}
+                >
                     <Option value='productName'>按名称搜索</Option>
                     <Option value='productDesc'>按描述搜索</Option>
                 </Select>
@@ -135,8 +140,9 @@ class ProductHome extends Component {
                     placeholder='关键字'
                     value={searchName}
                     style={{width: 150, margin: '0 15px'}}
+                    onChange={(event) => this.setState({searchName: event.target.value})}
                 />
-                <Button type='primary'>搜索</Button>
+                <Button type='primary' onClick={() => this.getProducts(1)}>搜索</Button>
             </span>
         )
 
@@ -161,11 +167,12 @@ class ProductHome extends Component {
                         total,
                         defaultPageSize: PAGE_SIZE,
                         showQuickJumper: true,
-                        onChange: this.getProducts
+                        onChange: this.getProducts  // 等价于 (pageNum) => this.getProducts(pageNum)
                     }}/>
             </Card>
          );
     }
+
 }
  
 export default ProductHome;

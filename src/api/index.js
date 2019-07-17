@@ -31,6 +31,22 @@ export const reqProducts = ({pageNum, pageSize}) => ajax(BASE + '/manage/product
 // 更新商品的状态(上架/下架)
 export const reqUpdateStatus = (productId, status) => ajax(BASE + '/manage/product/updateStatus', {productId, status}, 'POST')
 
+/*
+* 搜索商品分页列表 (根据商品名称/商品描述)
+* searchType: 搜索的类型, productName/productDesc
+* */
+export const reqSearchProducts = ({pageNum, pageSize, searchType, searchName}) => ajax(BASE + '/manage/product/search', {
+  pageNum,
+  pageSize,
+  [searchType]: searchName,
+})
+
+// // 搜索商品分页列表 (根据商品描述)
+// export const reqSearchProducts = ({pageNum, pageSize, searchName}) => ajax(BASE + '/manage/product/search', {
+//   pageNum,
+//   pageSize,
+//   productDesc: searchName
+// })
 
 
 
