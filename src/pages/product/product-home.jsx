@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
-import { reqProducts, reqSearchProducts } from '../../api'
+import { reqProducts, reqSearchProducts, reqUpdateStatus } from '../../api'
 import { PAGE_SIZE } from '../../utils/constants'
 import './product.less'
 
@@ -48,10 +48,11 @@ class ProductHome extends Component {
                 title: '状态',
                 render: (product) => {
                     // console.log(product)
-                    const { status } = product
+                    const { status, _id } = product
+                    const newStatus = status === 1 ? 2 : 1
                     return (
                         <span>
-                            <Button type='primary'>{status === 1 ? '下架' : '上架'}</Button>
+                            <Button type='primary' onClick={() => this.updateStatus(_id, newStatus)}>{status === 1 ? '下架' : '上架'}</Button>
                             <span>{status === 1 ? '在售' : '已下架'}</span>
                         </span>
                     )
@@ -74,7 +75,8 @@ class ProductHome extends Component {
     }
 
     getProducts = async(pageNum) => {
-        this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到
+        this.pageNum = pageNum // 保存pageNum, 让其它方法可以看到(更新商品状态会用到)
+
         this.setState({loading: true}) // 显示loading
         
         const {searchName, searchType} = this.state
@@ -110,6 +112,15 @@ class ProductHome extends Component {
             message.error(result.msg)
         }
 
+    }
+
+    // 更新指定商品的状态
+    updateStatus = async(productId, status) => {
+        const result = await reqUpdateStatus(productId, status)
+        if(result.status=== 0) {
+            message.success('更新商品成功')
+            this.getProducts(this.pageNum)
+        }
     }
 
     // 执行异步任务: 发异步ajax请求

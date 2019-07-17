@@ -49,7 +49,6 @@ export const reqSearchProducts = ({pageNum, pageSize, searchType, searchName}) =
 // })
 
 
-
 // 添加用户
 export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
 
