@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Table, Button, Icon, message, Modal} from 'antd'
 import LinkButton from '../../components/link-button'
-import { reqCategorys, reqUpdateCategory } from '../../api'
+import { reqCategorys, reqUpdateCategory, reqAddCategory } from '../../api'
 
 import AddForm from './add-form'
 import UpdateForm from './update-form'
@@ -116,8 +116,13 @@ class Category extends Component {
                     title="添加分类"
                     visible={showStatus === 1}
                     onCancel={this.handleCancel}
+                    onOk={this.addCategory}
                 >
-                    <AddForm />
+                    <AddForm
+                        categorys={categorys}
+                        parentId={parentId}
+                        setForm={(form) => {this.form = form}}
+                    />
                 </Modal>
 
                 <Modal
@@ -201,6 +206,39 @@ class Category extends Component {
         if (result.status === 0) {
             // 3 重新显示列表
             this.getCategorys()
+        } else {
+            message.error(result.msg)
+        }
+    }
+
+    // 添加分类
+    addCategory = async () => {
+        // 0 关闭窗口
+        this.setState({
+            showStatus: 0
+        })
+
+        // 1 收集数据
+        // console.log(this.form.getFieldsValue())
+
+        const { categoryName, parentId} = this.form.getFieldsValue()
+        console.log(parentId, categoryName)
+        // 清除输入数据（否则修改时会利用缓存的）
+        this.form.resetFields()
+
+        // 2 发起请求更新分类
+        const result = await reqAddCategory(categoryName, parentId)
+        if (result.status === 0) {
+            // 3 重新显示列表
+            // 添加的分类就是当前分类列表下的分类
+            if(parentId === this.state.parentId) {
+                // 重新获取当前分类列表显示
+                this.getCategorys()
+            } else if(parentId === '0') {  // 在二级分类列表下添加一级分类, 重新获取一级分类列表, 但不需要显示二级列表
+                this.getCategorys('0')
+            }
+        } else {
+            message.error(result.msg)
         }
     }
 
