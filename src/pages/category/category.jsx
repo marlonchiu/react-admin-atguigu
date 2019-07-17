@@ -3,6 +3,9 @@ import { Card, Table, Button, Icon, message, Modal} from 'antd'
 import LinkButton from '../../components/link-button'
 import { reqCategorys } from '../../api'
 
+import AddForm from './add-form'
+import UpdateForm from './update-form'
+
 class Category extends Component {
 
     state = {
@@ -111,7 +114,7 @@ class Category extends Component {
                     visible={showStatus === 1}
                     onCancel={this.handleCancel}
                 >
-                    <p>Some contents...</p>
+                    <AddForm />
                 </Modal>
 
                 <Modal
@@ -119,7 +122,7 @@ class Category extends Component {
                     visible={showStatus === 2}
                     onCancel={this.handleCancel}
                 >
-                    <p>Some contents...</p>
+                    <UpdateForm />
                 </Modal>
             </Card>
          );
