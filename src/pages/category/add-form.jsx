@@ -20,6 +20,7 @@ class AddForm extends Component {
 
     render() {
         const { parentId, categorys } = this.props
+        // 获取数据
         const { getFieldDecorator } = this.props.form
 
         return (
@@ -30,6 +31,7 @@ class AddForm extends Component {
                         rules: [{ required: true}],
                     })(
                         <Select>
+                            {/*  这里犯错  箭头函数  如果使用了 {} 就得return ,否则就不要*/}
                             <Option value='0' key='0'>一级分类</Option>
                             {
                                 categorys.map(c => {

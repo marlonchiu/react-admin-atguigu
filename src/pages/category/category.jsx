@@ -188,58 +188,74 @@ class Category extends Component {
     }
 
     // 更新分类
-    updateCategory = async () => {
-        // 0 关闭窗口
-        this.setState({
-            showStatus: 0
-        })
+    updateCategory = () => {
+        // 进行表单验证, 只有通过了才处理
+        this.form.validateFields(async (err, values) => {
+            if (!err) {
+                // 0 关闭窗口
+                this.setState({
+                    showStatus: 0
+                })
 
-        // 1 收集数据
-        const categoryId = this.category._id
-        const categoryName = this.form.getFieldValue('categoryName')
-        // console.log(categoryId, categoryName);
-        // 清除输入数据（否则修改时会利用缓存的）
-        this.form.resetFields()
+                // 1 收集数据
+                const categoryId = this.category._id
+                const {categoryName} = values   // this.form.getFieldValue('categoryName')
+                console.log(categoryId, categoryName);
+                // 清除输入数据（否则修改时会利用缓存的）
+                this.form.resetFields()
 
-        // 2 发起请求更新分类
-        const result = await reqUpdateCategory({categoryId, categoryName})
-        if (result.status === 0) {
-            // 3 重新显示列表
-            this.getCategorys()
-        } else {
-            message.error(result.msg)
-        }
+                // 2 发起请求更新分类
+                const result = await reqUpdateCategory({categoryId, categoryName})
+                if (result.status === 0) {
+                    // 3 重新显示列表
+                    this.getCategorys()
+                } else {
+                    message.error(result.msg)
+                }
+            }
+        });
+
+
+
     }
 
     // 添加分类
-    addCategory = async () => {
-        // 0 关闭窗口
-        this.setState({
-            showStatus: 0
-        })
+    addCategory = () => {
 
-        // 1 收集数据
-        // console.log(this.form.getFieldsValue())
+        this.form.validateFields(async (err, values) => {
+            if (!err) {
+                // 0 关闭窗口
+                this.setState({
+                    showStatus: 0
+                })
 
-        const { categoryName, parentId} = this.form.getFieldsValue()
-        console.log(parentId, categoryName)
-        // 清除输入数据（否则修改时会利用缓存的）
-        this.form.resetFields()
+                // 1 收集数据
+                // console.log(this.form.getFieldsValue())
 
-        // 2 发起请求更新分类
-        const result = await reqAddCategory(categoryName, parentId)
-        if (result.status === 0) {
-            // 3 重新显示列表
-            // 添加的分类就是当前分类列表下的分类
-            if(parentId === this.state.parentId) {
-                // 重新获取当前分类列表显示
-                this.getCategorys()
-            } else if(parentId === '0') {  // 在二级分类列表下添加一级分类, 重新获取一级分类列表, 但不需要显示二级列表
-                this.getCategorys('0')
+                const { categoryName, parentId } = values  // this.form.getFieldsValue()
+                console.log(categoryName, parentId)
+                // 清除输入数据（否则修改时会利用缓存的）
+                this.form.resetFields()
+
+                // 2 发起请求更新分类
+                const result = await reqAddCategory(categoryName, parentId)
+                if (result.status === 0) {
+                    // 3 重新显示列表
+                    // 添加的分类就是当前分类列表下的分类
+                    if(parentId === this.state.parentId) {
+                        // 重新获取当前分类列表显示
+                        this.getCategorys()
+                    } else if(parentId === '0') {  // 在二级分类列表下添加一级分类, 重新获取一级分类列表, 但不需要显示二级列表
+                        this.getCategorys('0')
+                    }
+
+                    // 在一级二类下添加二级分类  是不需要重新获取分类列表的
+                } else {
+                    message.error(result.msg)
+                }
             }
-        } else {
-            message.error(result.msg)
-        }
+        });
+
     }
 
 
