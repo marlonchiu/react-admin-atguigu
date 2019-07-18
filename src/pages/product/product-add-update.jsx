@@ -27,6 +27,8 @@ class ProductAddUpdate extends Component {
             isLeaf: false, // 不是叶子
         }))
 
+                
+
         // 更新options状态
         this.setState({
             options
@@ -95,6 +97,17 @@ class ProductAddUpdate extends Component {
         }
     }
 
+    componentWillMount () {
+        // 取出携带的state
+        const product = this.props.location.state  // 如果是添加没值, 否则有值
+        // console.log(product)
+        console.log(!!product)
+        // 保存是否是更新的标识
+        this.isUpdate = !!product
+        // 保存商品(如果没有, 保存是{})
+        this.product = product || {}
+    }
+
     componentDidMount() {
         // 获取分类列表  初始化时一级的
         this.getCategorys('0')
@@ -102,6 +115,23 @@ class ProductAddUpdate extends Component {
 
 
     render() {
+        const { isUpdate, product } = this
+        // pCategoryId 一级id  categoryId  二级id
+        const {pCategoryId, categoryId} = product
+
+        // 用来接收级联分类ID的数组
+        const categoryIds = []
+        if(isUpdate) {
+            // 商品是一个一级分类的商品
+            if(pCategoryId === '0') {
+                categoryIds.push(categoryId)
+            } else {
+                // 商品是一个二级分类的商品
+                categoryIds.push(pCategoryId)
+                categoryIds.push(categoryId)
+            }
+        }
+
 
         const {getFieldDecorator} = this.props.form
 
@@ -120,7 +150,7 @@ class ProductAddUpdate extends Component {
                       onClick={() => this.props.history.goBack()}
                   />
                 </LinkButton>
-            <span>添加商品</span>
+            <span>{ isUpdate ? '修改商品' : '添加商品'}</span>
             </span>
         )
 
@@ -130,7 +160,7 @@ class ProductAddUpdate extends Component {
                     <Item label="商品名称">
                         {
                             getFieldDecorator('name', {
-                                initialValue: '',
+                                initialValue: product.name,
                                 rules: [
                                     {required: true, message: '必须输入商品名称'}
                                 ]
@@ -140,7 +170,7 @@ class ProductAddUpdate extends Component {
                     <Item label="商品描述">
                         {
                             getFieldDecorator('desc', {
-                                initialValue: '',
+                                initialValue: product.desc,
                                 rules: [
                                     {required: true, message: '必须输入商品描述'}
                                 ]
@@ -150,7 +180,7 @@ class ProductAddUpdate extends Component {
                     <Item label="商品价格">
                         {
                             getFieldDecorator('price', {
-                                initialValue: '',
+                                initialValue: product.price,
                                 rules: [
                                     {required: true, message: '必须输入商品价格'},
                                     {validator: this.validatePrice}
@@ -160,12 +190,18 @@ class ProductAddUpdate extends Component {
                     </Item>
 
                     <Item label="商品分类">
-                        <Cascader
-                            placeholder='请指定商品分类'
-                            options={this.state.options}  /*需要显示的列表数据数组*/
-                            loadData={this.loadData}  /*当选择某个列表项, 加载下一级列表的监听回调*/
-                            changeOnSelect
-                        />
+                        {
+                            getFieldDecorator('categoryIds', {
+                                initialValue: categoryIds,
+                                rules: [
+                                    {required: true, message: '必须请指定商品分类'}
+                                ]
+                            })(<Cascader
+                                placeholder='请指定商品分类'
+                                options={this.state.options}  /*需要显示的列表数据数组*/
+                                loadData={this.loadData}  /*当选择某个列表项, 加载下一级列表的监听回调*/
+                            />)
+                        }
                     </Item>
                     <Item label="商品图片">
                         <div>商品图片</div>
