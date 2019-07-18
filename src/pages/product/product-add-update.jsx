@@ -19,7 +19,7 @@ class ProductAddUpdate extends Component {
     }
 
     // 处理options 的通用方法
-    initOptions = (categorys) => {
+    initOptions = async (categorys) => {
         // 根据categorys生成options数组
         const options = categorys.map(c => ({
             value: c._id,
@@ -27,7 +27,26 @@ class ProductAddUpdate extends Component {
             isLeaf: false, // 不是叶子
         }))
 
-                
+        // 如果是一个二级分类商品的更新
+        const {isUpdate, product} = this
+        const {pCategoryId} = product
+        if(isUpdate && pCategoryId !== '0') {
+            // 获取对应的二级分类列表
+            const subCategorys = await reqCategorys(pCategoryId)
+
+            // 生成二级下拉列表的options
+            const childrenOptions = subCategorys.map(sub => ({
+                value: sub._id,
+                label: sub.name,
+                isLeaf: true
+            }))
+
+            // 找到当前商品对应的一级option 对象
+            const targetOption = options.find(option => option.value === pCategoryId)
+
+            // 关联对应的一级option上
+            targetOption.children = childrenOptions
+        }
 
         // 更新options状态
         this.setState({
@@ -56,8 +75,8 @@ class ProductAddUpdate extends Component {
    */
     loadData = async selectedOptions => {
         // 得到选择的option对象
-        const targetOption = selectedOptions[selectedOptions.length - 1];
-        console.log(targetOption)
+        const targetOption = selectedOptions[selectedOptions.length - 1]
+        // console.log(targetOption)
         // 显示loading效果
         targetOption.loading = true
 
