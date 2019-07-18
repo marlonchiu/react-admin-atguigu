@@ -33,13 +33,13 @@ class ProductDetail extends Component {
             */
 
             // 一次性发送多个请求, 只有都成功了, 才正常处理  Promise.all
-            // const resultList = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
-            // const cName1 = resultList[0].data.name
-            // const cName2 = resultList[1].data.name
-            // this.setState({
-            //     cName1,
-            //     cName2
-            // })
+            const resultList = await Promise.all([reqCategory(pCategoryId), reqCategory(categoryId)])
+            const cName1 = resultList[0].data.name
+            const cName2 = resultList[1].data.name
+            this.setState({
+                cName1,
+                cName2
+            })
         }
     }
 
@@ -47,6 +47,8 @@ class ProductDetail extends Component {
         // 读取携带过来的state数据
         console.log(this.props.location.state.product);
         const {name, desc, price, detail, imgs} = this.props.location.state.product
+        const {cName1, cName2} = this.state
+
         const title = (
             <span>
                 <LinkButton>
@@ -77,7 +79,7 @@ class ProductDetail extends Component {
                     </Item>
                     <Item>
                         <span className="left">所属分类:</span>
-                        <span> 手机 --> 小米</span>
+                        <span>{cName1} {cName2 ? ' --> '+cName2 : ''}</span>
                     </Item>
                     <Item>
                         <span className="left">商品图片:</span>

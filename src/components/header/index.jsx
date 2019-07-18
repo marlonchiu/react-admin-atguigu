@@ -41,7 +41,7 @@ class Header extends Component {
     // 判断父元素是否匹配  如果有children  在查找子元素是否匹配
     getTitle = (path) => {
         // 得到当前请求路径
-        console.log(path);
+        // console.log(path)
 
         let title
         menuList.forEach(menu => {

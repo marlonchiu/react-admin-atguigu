@@ -30,9 +30,10 @@ class ProductAddUpdate extends Component {
         // 如果是一个二级分类商品的更新
         const {isUpdate, product} = this
         const {pCategoryId} = product
+
         if(isUpdate && pCategoryId !== '0') {
             // 获取对应的二级分类列表
-            const subCategorys = await reqCategorys(pCategoryId)
+            const subCategorys = await this.getCategorys(pCategoryId)
 
             // 生成二级下拉列表的options
             const childrenOptions = subCategorys.map(sub => ({
