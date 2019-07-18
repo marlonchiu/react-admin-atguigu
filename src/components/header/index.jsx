@@ -40,16 +40,26 @@ class Header extends Component {
     // 根据请求的 path 得到对应的标题
     // 判断父元素是否匹配  如果有children  在查找子元素是否匹配
     getTitle = (path) => {
+        // 得到当前请求路径
+        console.log(path);
+
         let title
         menuList.forEach(menu => {
+            // 如果当前item对象的key与path一样,item的title就是需要显示的title
             if(menu.key === path) {
                 title = menu.title
             } else if(menu.children) {
-                menu.children.forEach(item => {
-                    if(path.indexOf(item.key) === 0) {
-                        title = item.title
-                    }
-                })
+                // 在所有子item中查找匹配的
+                const cItem = menu.children.find(cItem => path.indexOf(cItem.key) === 0)
+                // 如果有值才说明匹配
+                if(cItem) {
+                   title = cItem.title
+                }
+                // menu.children.forEach(item => {
+                //     if(path.indexOf(item.key) === 0) {
+                //         title = item.title
+                //     }
+                // })
             }
         })
 
