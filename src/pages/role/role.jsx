@@ -8,8 +8,9 @@ import {
 } from 'antd'
 import {formateDate} from '../../utils/dateUtils'
 import { PAGE_SIZE } from '../../utils/constants'
-import {reqRoles, reqAddRole} from '../../api'
+import {reqRoles, reqAddRole, reqUpdateRole} from '../../api'
 import AddForm from './add-form'
+import AuthForm from './auth-form'
 
 class Role extends Component {
 
@@ -83,7 +84,6 @@ class Role extends Component {
         }
     }
 
-
     // 添加角色
     addRole = () => {
         this.form.validateFields(async (err, values) => {
@@ -124,6 +124,32 @@ class Role extends Component {
         });
     }
 
+    // 设置角色权限
+    updateRole = () => {
+        this.form.validateFields(async (err, values) => {
+            if (!err) {
+                // 0 关闭窗口
+                this.setState({
+                    isShowAuth: false
+                })
+                // 收集数据
+                console.log(values);
+
+                // 清除输入数据（否则修改时会利用缓存的）
+                this.form.resetFields()
+
+                // 2 发起请求更新分类
+                // const result = await reqUpdateRole(values)
+                // if (result.status === 0) {
+                //     message.success('角色权限设置成功')
+                //
+                // } else {
+                //     message.error(result.msg)
+                // }
+            }
+        });
+    }
+
     componentWillMount() {
         this.initColumn()
     }
@@ -133,12 +159,12 @@ class Role extends Component {
     }
 
     render() {
-        const {roles, role, isShowAdd} = this.state
+        const {roles, role, isShowAdd, isShowAuth} = this.state
 
         const title = (
             <span>
                 <Button type='primary' onClick={() => this.setState({isShowAdd: true})}>创建角色</Button> &nbsp;&nbsp;
-                <Button type='primary' disabled={!role._id}>设置角色权限</Button>
+                <Button type='primary' disabled={!role._id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button>
             </span>
         )
         return (
@@ -161,7 +187,6 @@ class Role extends Component {
                     onRow={this.onRow}
                 />
 
-
                 <Modal
                     title="添加角色"
                     visible={isShowAdd}
@@ -175,6 +200,21 @@ class Role extends Component {
                 >
                     <AddForm
                         setForm={(form) => {this.form = form}}
+                    />
+                </Modal>
+
+                <Modal
+                    title="设置角色权限"
+                    visible={isShowAuth}
+                    onCancel={() => {
+                        this.setState({
+                            isShowAuth: false
+                        })
+                    }}
+                    onOk={this.updateRole}
+                >
+                    <AuthForm
+                        role={role}
                     />
                 </Modal>
             </Card>
