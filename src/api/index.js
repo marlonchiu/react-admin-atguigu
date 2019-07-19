@@ -48,6 +48,12 @@ export const reqSearchProducts = ({pageNum, pageSize, searchType, searchName}) =
 //   productDesc: searchName
 // })
 
+// 获取所有角色的列表
+export const reqRoles = () => ajax(BASE + '/manage/role/list')
+// 添加角色
+export const reqAddRole = (roleName) => ajax(BASE + '/manage/role/add', {roleName}, 'POST')
+// 添加角色
+export const reqUpdateRole = (role) => ajax(BASE + '/manage/role/update', role, 'POST')
 
 // 添加用户
 export const reqAddUser = (user) => ajax(BASE + '/manage/user/add', user, 'POST')
