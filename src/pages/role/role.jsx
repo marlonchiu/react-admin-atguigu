@@ -7,6 +7,8 @@ import {
     message
 } from 'antd'
 import {formateDate} from '../../utils/dateUtils'
+import memoryUtils from "../../utils/memoryUtils"
+import storageUtils from "../../utils/storageUtils"
 import { PAGE_SIZE } from '../../utils/constants'
 import {reqRoles, reqAddRole, reqUpdateRole} from '../../api'
 import AddForm from './add-form'
@@ -19,6 +21,11 @@ class Role extends Component {
         role: {}, // 选中的role
         isShowAdd: false, // 是否显示添加界面
         isShowAuth: false, // 是否显示设置权限界面
+    }
+
+    constructor (props) {
+        super(props)
+        this.auth = React.createRef()
     }
 
     initColumn = () => {
@@ -125,29 +132,51 @@ class Role extends Component {
     }
 
     // 设置角色权限
-    updateRole = () => {
-        this.form.validateFields(async (err, values) => {
-            if (!err) {
-                // 0 关闭窗口
-                this.setState({
-                    isShowAuth: false
-                })
-                // 收集数据
-                console.log(values);
+    updateRole = async () => {
+        // 隐藏确认框
+        this.setState({
+            isShowAuth: false
+        })
 
-                // 清除输入数据（否则修改时会利用缓存的）
-                this.form.resetFields()
+        const role = this.state.role
+        // 得到最新的menus
+        const menus = this.auth.current.getMenus()
+        console.log(menus)
+        // 赋值
+        role.menus = menus
+        // role.auth_time = Date.now()
+        // role.auth_name = memoryUtils.user.username
 
-                // 2 发起请求更新分类
-                // const result = await reqUpdateRole(values)
-                // if (result.status === 0) {
-                //     message.success('角色权限设置成功')
-                //
-                // } else {
-                //     message.error(result.msg)
-                // }
-            }
-        });
+        // 2 发起请求更新分类
+        const result = await reqUpdateRole(role)
+        if (result.status === 0) {
+            this.getRoles()
+            // message.success('角色权限设置成功')
+        } else {
+            message.error(result.msg)
+        }
+        // this.form.validateFields(async (err, values) => {
+        //     if (!err) {
+        //         // 0 关闭窗口
+        //         this.setState({
+        //             isShowAuth: false
+        //         })
+        //         // 收集数据
+        //         console.log(values);
+        //
+        //         // 清除输入数据（否则修改时会利用缓存的）
+        //         this.form.resetFields()
+        //
+        //         // 2 发起请求更新分类
+        //         // const result = await reqUpdateRole(values)
+        //         // if (result.status === 0) {
+        //         //     message.success('角色权限设置成功')
+        //         //
+        //         // } else {
+        //         //     message.error(result.msg)
+        //         // }
+        //     }
+        // });
     }
 
     componentWillMount() {
@@ -214,6 +243,7 @@ class Role extends Component {
                     onOk={this.updateRole}
                 >
                     <AuthForm
+                        ref={this.auth}
                         role={role}
                     />
                 </Modal>
