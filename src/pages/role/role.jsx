@@ -144,39 +144,27 @@ class Role extends Component {
         console.log(menus)
         // 赋值
         role.menus = menus
-        // role.auth_time = Date.now()
-        // role.auth_name = memoryUtils.user.username
+        role.auth_time = Date.now()
+        role.auth_name = memoryUtils.user.username
 
         // 2 发起请求更新分类
         const result = await reqUpdateRole(role)
         if (result.status === 0) {
-            this.getRoles()
-            // message.success('角色权限设置成功')
+            // 如果当前更新的是自己角色的权限, 强制退出
+            // if (role.id === memoryUtils.user.role_id) {
+            //
+            // } else {
+            //
+            // }
+            message.success('设置角色权限成功')
+            // this.getRoles()
+            this.setState({
+                roles: [...this.state.roles]
+            })
         } else {
             message.error(result.msg)
         }
-        // this.form.validateFields(async (err, values) => {
-        //     if (!err) {
-        //         // 0 关闭窗口
-        //         this.setState({
-        //             isShowAuth: false
-        //         })
-        //         // 收集数据
-        //         console.log(values);
-        //
-        //         // 清除输入数据（否则修改时会利用缓存的）
-        //         this.form.resetFields()
-        //
-        //         // 2 发起请求更新分类
-        //         // const result = await reqUpdateRole(values)
-        //         // if (result.status === 0) {
-        //         //     message.success('角色权限设置成功')
-        //         //
-        //         // } else {
-        //         //     message.error(result.msg)
-        //         // }
-        //     }
-        // });
+
     }
 
     componentWillMount() {

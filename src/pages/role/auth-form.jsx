@@ -49,7 +49,25 @@ class AuthForm extends Component {
         this.treeNodes = this.getTreeNodes(menuList)
     }
 
+    // 根据新传入的role来更新checkedKeys状态
+    /*
+    当组件接收到新的属性时自动调用
+     */
+    // 如果不优化
+    //     1. 点击取消会记录上次的选择但是我们是没有选中的
+    //     2. 点击选择其他角色是  所有的默认角色还是第一次选择的那个  视频 92
+    componentWillReceiveProps (nextProps) {
+        console.log('componentWillReceiveProps()', nextProps)
+        const menus = nextProps.role.menus
+        this.setState({
+            checkedKeys: menus
+        })
+        // 这种方式也可以在此处
+        // this.state.checkedKeys = menus
+    }
+
     render() {
+        console.log('AuthForm render()')
         // 获取数据
         const { role } = this.props
         const { checkedKeys } = this.state
