@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
 import { reqCategorys } from '../../api'
+import PicturesWall from './pictures-wall'
 import {
     Card,
     Icon,
@@ -224,7 +225,7 @@ class ProductAddUpdate extends Component {
                         }
                     </Item>
                     <Item label="商品图片">
-                        <div>商品图片</div>
+                        <PicturesWall>商品图片</PicturesWall>
                     </Item>
                     <Item label="商品详情">
                         <div>商品详情</div>
