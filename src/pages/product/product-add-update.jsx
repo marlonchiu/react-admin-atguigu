@@ -145,7 +145,7 @@ class ProductAddUpdate extends Component {
     render() {
         const { isUpdate, product } = this
         // pCategoryId 一级id  categoryId  二级id
-        const {pCategoryId, categoryId} = product
+        const {pCategoryId, categoryId, imgs} = product
 
         // 用来接收级联分类ID的数组
         const categoryIds = []
@@ -232,7 +232,7 @@ class ProductAddUpdate extends Component {
                         }
                     </Item>
                     <Item label="商品图片">
-                        <PicturesWall ref={this.pw}>商品图片</PicturesWall>
+                        <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                     </Item>
                     <Item label="商品详情">
                         <div>商品详情</div>
