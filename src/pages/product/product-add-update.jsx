@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import LinkButton from '../../components/link-button'
 import { reqCategorys } from '../../api'
 import PicturesWall from './pictures-wall'
+import RichTextEditor from './rich-text-editor'
 import {
     Card,
     Icon,
@@ -20,6 +21,7 @@ class ProductAddUpdate extends Component {
 
         // 创建用来保存ref标识的标签对象的容器
         this.pw = React.createRef()
+        this.editor = React.createRef()
     }
 
     state = {
@@ -145,7 +147,7 @@ class ProductAddUpdate extends Component {
     render() {
         const { isUpdate, product } = this
         // pCategoryId 一级id  categoryId  二级id
-        const {pCategoryId, categoryId, imgs} = product
+        const {pCategoryId, categoryId, imgs, detail} = product
 
         // 用来接收级联分类ID的数组
         const categoryIds = []
@@ -234,8 +236,8 @@ class ProductAddUpdate extends Component {
                     <Item label="商品图片">
                         <PicturesWall ref={this.pw} imgs={imgs}></PicturesWall>
                     </Item>
-                    <Item label="商品详情">
-                        <div>商品详情</div>
+                    <Item label="商品详情" labelCol={{span: 2}} wrapperCol={{span: 20}}>
+                        <RichTextEditor ref={this.editor} detail={detail}></RichTextEditor>
                     </Item>
                     <Item>
                         <Button type='primary' onClick={this.handleSubmit}>提交</Button>
@@ -253,6 +255,8 @@ class ProductAddUpdate extends Component {
                 // 获取imgs 的名字数组
                 const imgs = this.pw.current.getImgs()
                 console.log('imgs', imgs)
+                const detail = this.editor.current.getDetail()
+                console.log('detail', detail)
 
                 message.error('数据获取失败')
             }
