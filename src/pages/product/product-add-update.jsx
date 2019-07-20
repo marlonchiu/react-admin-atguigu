@@ -15,6 +15,13 @@ const { Item } = Form
 const { TextArea } = Input
 
 class ProductAddUpdate extends Component {
+    constructor(props) {
+        super(props)
+
+        // 创建用来保存ref标识的标签对象的容器
+        this.pw = React.createRef()
+    }
+
     state = {
         options: [],
     }
@@ -225,7 +232,7 @@ class ProductAddUpdate extends Component {
                         }
                     </Item>
                     <Item label="商品图片">
-                        <PicturesWall>商品图片</PicturesWall>
+                        <PicturesWall ref={this.pw}>商品图片</PicturesWall>
                     </Item>
                     <Item label="商品详情">
                         <div>商品详情</div>
@@ -243,6 +250,9 @@ class ProductAddUpdate extends Component {
             if(!error) {
                 // 发送请求
                 console.log(values)
+                // 获取imgs 的名字数组
+                const imgs = this.pw.current.getImgs()
+                console.log('imgs', imgs)
 
                 message.error('数据获取失败')
             }
@@ -251,3 +261,16 @@ class ProductAddUpdate extends Component {
 }
  
 export default Form.create()(ProductAddUpdate)
+
+
+/*
+1. 子组件调用父组件的方法: 将父组件的方法以函数属性的形式传递给子组件, 子组件就可以调用
+2. 父组件调用子组件的方法: 在父组件中通过ref得到子组件标签对象(也就是组件对象), 调用其方法
+ */
+
+/*
+使用ref
+1. 创建ref容器: thi.pw = React.createRef()
+2. 将ref容器交给需要获取的标签元素: <PictureWall ref={this.pw} />
+3. 通过ref容器读取标签元素: this.pw.current
+ */

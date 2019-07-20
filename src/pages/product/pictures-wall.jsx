@@ -17,14 +17,21 @@ class PicturesWall extends React.Component {
         previewVisible: false, // 标识是否显示大图预览Modal
         previewImage: '', // 大图的url
         fileList: [
-            {
-                uid: '-1', // 每个file都有自己唯一的id  // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
-                name: 'xxx.png', // 图片文件名
-                status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
-                url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png', // 图片地址
-            },
+            // {
+            //     uid: '-1', // 每个file都有自己唯一的id  // 文件唯一标识，建议设置为负数，防止和内部产生的 id 冲突
+            //     name: 'xxx.png', // 图片文件名
+            //     status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
+            //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png', // 图片地址
+            // }
         ],
     };
+
+    /*
+    获取所有已上传图片文件名的数组
+   */
+    getImgs  = () => {
+        return this.state.fileList.map(file => file.name)
+    }
 
     // 隐藏Modal
     handleCancel = () => this.setState({ previewVisible: false });
@@ -47,7 +54,7 @@ class PicturesWall extends React.Component {
     fileList: 所有已上传图片文件对象的数组
      */
     handleChange = ({ file, fileList }) => {
-        console.log(file, fileList);
+        console.log(file, file.status, fileList);
         // 一旦上传成功, 将当前上传的file的信息修正(name, url)
         if(file.status === 'done') {
             const result = file.response  // {status: 0, data: {name: 'xxx.jpg', url: '图片地址'}}
