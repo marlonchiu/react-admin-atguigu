@@ -108,7 +108,31 @@ class User extends Component {
 
     // 添加或者更新用户
     addOrUpdateUser = () => {
+        // 进行表单验证, 只有通过了才处理
+        this.form.validateFields(async (err, values) => {
+            // 关闭弹窗
+            this.setState({
+                isShow: false
+            })
 
+            // console.log(values)
+            // 1. 收集输入数据
+            const user = values
+            this.form.resetFields()
+
+            // 如果是更新, 需要给user指定_id属性
+            if (this.user) {
+                user._id = this.user._id
+            }
+
+            // 2. 提交添加的请求
+            const result = await reqAddOrUpdateUser(user)
+            // 3. 更新列表显示
+            if(result.status===0) {
+                message.success(`${this.user ? '修改' : '添加'}用户成功`)
+                this.getUsers()
+            }
+        })
     }
 
     componentDidMount () {
@@ -139,7 +163,7 @@ class User extends Component {
                     visible={isShow}
                     onOk={this.addOrUpdateUser}
                     onCancel={() => {
-                        // this.form.resetFields()
+                        this.form.resetFields()
                         this.setState({isShow: false})
                     }}
                 >
