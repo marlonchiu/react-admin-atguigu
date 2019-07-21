@@ -93,9 +93,9 @@ class Login extends Component {
                           {
                               getFieldDecorator('password', {
                                 rules: [
-                                  { required: true, message: 'Please input your Password!' },
-                                  // 使用自定义的验证规则
-                                  { validator: this.validatePwd }
+                                      { required: true, message: 'Please input your Password!' },
+                                      // 使用自定义的验证规则
+                                      { validator: this.validatePwd }
                                   ],
                               })(
                                 <Input
