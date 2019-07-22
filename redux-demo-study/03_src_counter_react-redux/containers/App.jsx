@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Counter from '../components/Counter'
-import {increment, decrement, asyncIncrement} from '../redux/actions'
+import {increment, decrement} from '../redux/actions'
 
 // 指定向Counter传入哪些一般属性(属性值的来源就是store中的state)
 // function mapStateToProps(state) {
@@ -8,7 +8,7 @@ import {increment, decrement, asyncIncrement} from '../redux/actions'
 //     count: state
 //   }
 // }
-// const mapStateToProps = (state) => ({count: state})
+const mapStateToProps = (state) => ({count: state})
 
 
 // 指定向Counter传入哪些函数属性
@@ -22,14 +22,14 @@ import {increment, decrement, asyncIncrement} from '../redux/actions'
 // }
 
 /*如果是对象, 将对象中的方法包装成一个新函数, 并传入UI组件 */
-// const mapDispatchToProps = { increment, decrement }
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Counter)
+const mapDispatchToProps = { increment, decrement }
 
 export default connect(
-  state => ({count: state}),
-  {increment, decrement, asyncIncrement}
+  mapStateToProps,
+  mapDispatchToProps
 )(Counter)
+
+// export default connect(
+//   state => ({count: state}),
+//   {increment, decrement}
+// )(Counter)
