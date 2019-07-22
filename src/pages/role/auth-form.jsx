@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import menuList from '../../config/menuConfig'
 
@@ -6,7 +6,7 @@ import { Form, Input, Tree} from 'antd'
 const {Item} = Form
 const { TreeNode } = Tree
 
-class AuthForm extends Component {
+class AuthForm extends PureComponent {
 
     static propTypes = {
         role: PropTypes.object.isRequired,

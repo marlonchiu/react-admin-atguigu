@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import LinkButton from '../../components/link-button'
 import { reqCategorys, reqAddOrUpdateProduct } from '../../api'
 import PicturesWall from './pictures-wall'
@@ -15,7 +15,7 @@ import {
 const { Item } = Form
 const { TextArea } = Input
 
-class ProductAddUpdate extends Component {
+class ProductAddUpdate extends PureComponent {
     constructor(props) {
         super(props)
 
