@@ -20,7 +20,7 @@
       2). 当前组件setState(), 重新执行render(), 即使state没有任何变化
 
   2. 解决Component存在的问题
-      1). 原因: 组件的componentShouldUpdate()默认返回true, 即使数据没有变化render()都会重新执行
+      1). 原因: 组件的shouldComponentUpdate()默认返回true, 即使数据没有变化render()都会重新执行
       2). 办法1: 重写shouldComponentUpdate(), 判断如果数据有变化返回true, 否则返回false
       3). 办法2: 使用PureComponent代替Component
       4). 说明: 一般都使用PureComponent来优化组件性能
