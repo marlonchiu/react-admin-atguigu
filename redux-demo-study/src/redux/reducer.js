@@ -1,11 +1,12 @@
 /*
 reducer函数模块: 根据当前state和指定action返回一个新的state
  */
+import { combineReducers } from 'redux'
 import {INCREMENT, DECREMENT} from './action-types'
 /*
 管理count状态数据的reducer
  */
-export default function count(state=1, action) {
+function count(state=1, action) {
   console.log('count()', state, action)
 
   switch (action.type) {
@@ -17,3 +18,24 @@ export default function count(state=1, action) {
       return state
   }
 }
+
+const initUser = {
+  name: 'marlon',
+  age: 26
+}
+/*
+管理user状态数据的reducer
+ */
+function user(state = initUser, action) {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
+
+//  combineReducers函数: 接收包含所有reducer函数的对象, 返回一个新的reducer函数(总reducer)
+// 总的reducer函数管理的state的结构
+export default combineReducers({
+  count,
+  user
+})

@@ -5,10 +5,10 @@ import {increment, decrement, asyncIncrement} from '../redux/actions'
 // 指定向Counter传入哪些一般属性(属性值的来源就是store中的state)
 // function mapStateToProps(state) {
 //   return {
-//     count: state.count
+//     count: state
 //   }
 // }
-// const mapStateToProps = (state) => ({count: state.count})
+// const mapStateToProps = (state) => ({count: state})
 
 
 // 指定向Counter传入哪些函数属性
@@ -30,6 +30,6 @@ import {increment, decrement, asyncIncrement} from '../redux/actions'
 // )(Counter)
 
 export default connect(
-  state => ({count: state.count}),
+  state => ({count: state}),
   {increment, decrement, asyncIncrement}
 )(Counter)
