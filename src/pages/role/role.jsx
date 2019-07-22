@@ -99,7 +99,8 @@ class Role extends Component {
                 this.setState({
                     isShowAdd: false
                 })
-                // 收集数据
+
+                // 1 收集数据
                 const { roleName } = values
                 
                 // 清除输入数据（否则修改时会利用缓存的）
@@ -128,7 +129,7 @@ class Role extends Component {
                     message.error(result.msg)
                 }
             }
-        });
+        })
     }
 
     // 设置角色权限
@@ -149,11 +150,12 @@ class Role extends Component {
 
         // 2 发起请求更新分类
         const result = await reqUpdateRole(role)
+
         if (result.status === 0) {
             // this.getRoles()
 
             // 如果当前更新的是自己角色的权限, 强制退出
-            if (role.id === memoryUtils.user.role_id) {
+            if (role._id === memoryUtils.user.role_id) {
                 memoryUtils.user = {}
                 storageUtils.removeUser()
                 this.props.history.replace('/login')
