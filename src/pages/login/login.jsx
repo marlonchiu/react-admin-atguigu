@@ -3,10 +3,13 @@ import { Redirect } from 'react-router-dom'
 import logo from '../../assets/images/logo.png'
 import './login.less'
 import {Button, Form, Icon, Input, message} from 'antd'
-import { reqLogin } from '../../api'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+// import { reqLogin } from '../../api'
+// import memoryUtils from '../../utils/memoryUtils'
+// import storageUtils from '../../utils/storageUtils'
 // const Item = Form.Item // 不能写在import 之前
+// 引入使用 redux
+import {connect} from 'react-redux'
+import {login} from '../../redux/actions'
 
 // 用户登陆的路由组件
 class Login extends Component {
@@ -47,8 +50,11 @@ class Login extends Component {
 
     render() {
         // 如果用户已经登录自动跳转到admin
-        if(memoryUtils.user && memoryUtils.user._id) {
-            return <Redirect to='/' />
+        // const user = memoryUtils.user
+        // 使用redux 去读
+        const user = this.props.user
+        if(user && user._id) {
+            return <Redirect to='/home' />
         }
         // this.props.form 得到具备强大功能的form 对象
         const { getFieldDecorator } = this.props.form
@@ -60,6 +66,8 @@ class Login extends Component {
                     <h1>React 项目: 后台管理系统</h1>
                 </header>
                 <section className='login-content'>
+                    <div className={user.errorMsg ? 'error-msg show' :
+                        'error-msg'}>{user.errorMsg}</div>
                     <h3>用户登陆</h3>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <Form.Item>
@@ -135,6 +143,9 @@ class Login extends Component {
                 // console.log('Received values of form: ', values);
                 const {username, password} = values
 
+                // 调用分发异步action的函数 => 发登陆的异步请求, 有了结果后更新状态
+                this.props.login(username, password)
+
                 // 初始用法
                 // reqLogin(username, password).then(response => {
                 //     console.log(response);
@@ -148,20 +159,24 @@ class Login extends Component {
                 //     console.log(e)
                 // }   error 已经在封装 axios 是处理掉了
 
-                const result = await reqLogin(username, password)
-                console.log('请求成功', result)
-                if(result.status === 0) { // 登陆成功
-                    message.success('登录成功')
+                // const result = await reqLogin(username, password)
+                // console.log('请求成功', result)
 
-                    const user = result.data
-                    storageUtils.saveUser(user)
-                    memoryUtils.user = user
-                    // 跳转到 admin
-                    // 细节： 使用replace表示当我们登陆成功以后是不需要再回到login页面的 故不用push
-                    this.props.history.replace('/')
-                } else {
-                    message.error(result.msg)
-                }
+
+                // if(result.status === 0) { // 登陆成功
+                //     message.success('登录成功')
+                //
+                //     const user = result.data
+                //     storageUtils.saveUser(user)
+                //     memoryUtils.user = user
+                //     // 跳转到 admin
+                //     // 细节： 使用replace表示当我们登陆成功以后是不需要再回到login页面的 故不用push
+                //     this.props.history.replace('/home')
+                // } else {
+                //     message.error(result.msg)
+                // }
+            } else {
+                message.error('校验失败')
             }
         });
     }
@@ -202,7 +217,10 @@ class Login extends Component {
 * */
 // export default Login
 const WrappedLoginForm = Form.create({ name: 'normal_login' })(Login)
-export default WrappedLoginForm
+export default connect(
+    state => ({user: state.user}),
+    {login}
+)(WrappedLoginForm)
 
 /*
     前台表单验证，
