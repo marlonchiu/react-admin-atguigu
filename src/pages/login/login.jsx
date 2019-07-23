@@ -158,7 +158,7 @@ class Login extends Component {
                     memoryUtils.user = user
                     // 跳转到 admin
                     // 细节： 使用replace表示当我们登陆成功以后是不需要再回到login页面的 故不用push
-                    this.props.history.replace('/')
+                    this.props.history.replace('/home')
                 } else {
                     message.error(result.msg)
                 }

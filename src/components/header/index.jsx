@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 import './index.less'
 import { reqWeather } from '../../api'
 import { formateDate } from '../../utils/dateUtils'
@@ -8,6 +9,7 @@ import storageUtils from '../../utils/storageUtils'
 import LinkButton from '../link-button'
 import {Modal} from 'antd'
 import menuList from '../../config/menuConfig'
+
 
 class Header extends Component {
     constructor(props) {
@@ -88,9 +90,10 @@ class Header extends Component {
         // 当前登录的用户
         const user = memoryUtils.user
         // 当前页面的请求路径
-        const path  = this.props.location.pathname
+        // const path  = this.props.location.pathname
         // console.log(path);
-        const title = this.getTitle(path)
+        // const title = this.getTitle(path)
+        const title = this.props.headTitle
 
         return ( 
             <div className='header'>
@@ -129,4 +132,7 @@ class Header extends Component {
     }
 }
  
-export default withRouter(Header)
+export default connect(
+   state => ({headTitle: state.headTitle}),
+    {}
+)(withRouter(Header))
