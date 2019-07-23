@@ -37,7 +37,7 @@ function user(state = initUser, action) {
         case SHOW_ERROR_MSG:
             const errorMsg = action.errorMsg
             // state.errorMsg = errorMsg  // 不要直接修改原本状态数据
-            return {...state, errorMsg}
+            return {...state, errorMsg} // 在原有数据的基础上扩展数据
         case RESET_USER:
             return {}
         default:

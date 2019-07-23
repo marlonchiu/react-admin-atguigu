@@ -4,11 +4,12 @@ import {connect} from 'react-redux'
 import './index.less'
 import { reqWeather } from '../../api'
 import { formateDate } from '../../utils/dateUtils'
-import memoryUtils from '../../utils/memoryUtils'
-import storageUtils from '../../utils/storageUtils'
+// import memoryUtils from '../../utils/memoryUtils'
+// import storageUtils from '../../utils/storageUtils'
 import LinkButton from '../link-button'
 import {Modal} from 'antd'
 import menuList from '../../config/menuConfig'
+import {logout} from '../../redux/actions'
 
 
 class Header extends Component {
@@ -88,7 +89,8 @@ class Header extends Component {
         // 数据解构赋值
         const {sysTime, dayPictureUrl, weather} = this.state
         // 当前登录的用户
-        const user = memoryUtils.user
+        // const user = memoryUtils.user
+        const user = this.props.user
         // 当前页面的请求路径
         // const path  = this.props.location.pathname
         // console.log(path);
@@ -118,12 +120,13 @@ class Header extends Component {
         Modal.confirm({
             content: '确定退出当前系统吗?',
             onOk: () => {
-                // 要用箭头函数  存在this 的问题
-                console.log('ok')
-                // 移除登录信息user 跳转到login
-                storageUtils.removeUser()
-                memoryUtils.user = {}
-                this.props.history.replace('/login')
+                // // 要用箭头函数  存在this 的问题
+                // console.log('ok')
+                // // 移除登录信息user 跳转到login
+                // storageUtils.removeUser()
+                // memoryUtils.user = {}
+                // this.props.history.replace('/login')
+                this.props.logout()
             },
             onCancel() {
                 console.log('cancel')
@@ -133,6 +136,6 @@ class Header extends Component {
 }
  
 export default connect(
-   state => ({headTitle: state.headTitle}),
-    {}
+   state => ({headTitle: state.headTitle, user: state.user}),
+    {logout}
 )(withRouter(Header))

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import './index.less'
 import logo from '../../assets/images/logo.png'
 import menuList from '../../config/menuConfig'
-import memoryUtils from "../../utils/memoryUtils"
+// import memoryUtils from "../../utils/memoryUtils"
 import { setHeadTitle } from '../../redux/actions'
 import { Menu, Icon } from 'antd'
 const { SubMenu } = Menu
@@ -82,8 +82,10 @@ class LeftNav extends Component {
     hasAuth = (item) => {
         const { key, isPublic } = item
 
-        const menus = memoryUtils.user.role.menus
-        const username = memoryUtils.user.username
+        // const menus = memoryUtils.user.role.menus
+        // const username = memoryUtils.user.username
+        const menus = this.props.user.role.menus
+        const username = this.props.user.username
         /*
             1. 如果当前用户是admin
             2. 如果当前item是公开的
@@ -285,6 +287,6 @@ class LeftNav extends Component {
     新的组件向非路由组件传递3个属性: history/location/match
 */
 export default connect(
-    state => ({}),
+    state => ({user: state.user}),
     {setHeadTitle}
 )(withRouter(LeftNav))
