@@ -12,8 +12,8 @@ import App from './App'
 //     memoryUtils.user = user
 // }
 
-ReactDOM.render((
+ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>
-), document.getElementById('root'))
+, document.getElementById('root'))
