@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import memoryUtils from '../../utils/memoryUtils'
+import {connect} from 'react-redux'
+// import memoryUtils from '../../utils/memoryUtils'
 import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
 
@@ -20,7 +21,8 @@ const { Footer, Sider, Content } = Layout
 // 后台管理的路由组件
 class Admin extends Component {
     render() {
-        const user = memoryUtils.user
+        // const user = memoryUtils.user
+        const user = this.props.user
         // console.log(user)
         if(!user._id) {
             return <Redirect to='/login' />
@@ -57,5 +59,8 @@ class Admin extends Component {
          );
     }
 }
- 
-export default Admin;
+
+export default connect(
+    state => ({user: state.user}),
+    {}
+)(Admin)
