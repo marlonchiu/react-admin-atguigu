@@ -4,6 +4,7 @@ import { BASE_IMG_URL } from '../../utils/constants'
 import {reqCategory} from '../../api'
 
 import { Card, Icon, List} from 'antd'
+import memoryUtils from "../../utils/memoryUtils"
 const { Item } = List
 
 class ProductDetail extends Component {
@@ -15,7 +16,8 @@ class ProductDetail extends Component {
     
     async componentDidMount () {
         // 得到当前商品的分类ID
-        const {pCategoryId, categoryId} = this.props.location.state.product
+        // const {pCategoryId, categoryId} = this.props.location.state.product
+        const {pCategoryId, categoryId} = memoryUtils.product
         console.log(pCategoryId, categoryId);
 
         if(pCategoryId === '0') { // 一级分类下的商品
@@ -43,10 +45,16 @@ class ProductDetail extends Component {
         }
     }
 
+    // 在卸载之前清除保存的数据
+    componentWillUnmount () {
+        memoryUtils.product = {}
+    }
+
     render() {
         // 读取携带过来的state数据
-        console.log(this.props.location.state.product);
-        const {name, desc, price, detail, imgs} = this.props.location.state.product
+        // console.log(this.props.location.state.product);
+        // const {name, desc, price, detail, imgs} = this.props.location.state.product
+        const {name, desc, price, detail, imgs} = memoryUtils.product
         const {cName1, cName2} = this.state
 
         const title = (
