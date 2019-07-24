@@ -2,10 +2,18 @@
 
 ## 写在前边
 
-```text
+```markdown
 参考学习 尚硅谷前端20190105班级学习视频项目  张小飞老师
+https://github.com/zxfjd3g/190105_ReactAdmin
 ```
+## 分支说明
 
+```npm
+master 分支为 dev 和 redux 合并版本  最终运行的还是 redux
+dev 分支 为正常开发未使用 redux 做数据管理
+redux 分支 为开发使用 redux 做数据管理
+
+```
 ## 运行指令
 
 ```npm
