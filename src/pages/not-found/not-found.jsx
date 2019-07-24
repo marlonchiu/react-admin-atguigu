@@ -1,11 +1,9 @@
 import React, {Component} from 'react'
 import {Button, Row, Col} from 'antd'
 import './not-found.less'
-<<<<<<< HEAD
-=======
 import {connect} from 'react-redux'
 import {setHeadTitle} from '../../redux/actions'
->>>>>>> redux
+
 
 /*
 前台404页面
@@ -13,17 +11,12 @@ import {setHeadTitle} from '../../redux/actions'
 class NotFound extends Component {
 
   goHome = () => {
-<<<<<<< HEAD
-    // this.props.setHeadTitle('首页')
-=======
     this.props.setHeadTitle('首页')
->>>>>>> redux
     this.props.history.replace('/home')
   }
 
   render() {
     return (
-
       <Row className='not-found'>
         <Col span={12} className='left'></Col>
         <Col span={12} className='right'>
@@ -40,11 +33,7 @@ class NotFound extends Component {
   }
 }
 
-<<<<<<< HEAD
-export default NotFound
-=======
 export default connect(
   null,
   {setHeadTitle}
 )(NotFound)
->>>>>>> redux
